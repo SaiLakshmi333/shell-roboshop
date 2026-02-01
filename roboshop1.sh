@@ -12,7 +12,7 @@ do
     --query 'Instances[0].InstanceId' \
     --output text)
 
-    if [ $instance == "frontend" ]; then
+    if [ $instance == "robo" ]; then
     IP=$(
         aws ec2 describe-instances \
          --instance-ids $instance_id \
@@ -27,5 +27,5 @@ do
          --output text 
          )
          fi
-echo "IP address : $IP"
+echo "IP address :$IP"
          done
