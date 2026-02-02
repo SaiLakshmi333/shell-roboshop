@@ -11,7 +11,6 @@ n="\e[0m"
 if [ $user_id -ne 0 ];then
 echo "Please access with root user"
 exit 1
-else
 fi
 
 mkdir -p $log_folder
