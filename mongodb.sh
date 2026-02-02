@@ -2,11 +2,11 @@
 user_id=$(id -u)
 log_folder="/var/log/shell_folder"
 log_file="/var/log/shell_folder/$0.log"
-R = "\e[31m"
-G ="\e[32m"
-y ="\e[33m"
-b ="\e[34m" 
-n ="\e[0m"
+R="\e[31m"
+G="\e[32m"
+y="\e[33m"
+b="\e[34m" 
+n="\e[0m"
 if [ $user_id -ne 0 ];then
 echo "Please access with root user"
 exit 1
