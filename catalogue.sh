@@ -17,9 +17,10 @@ fi
 mkdir -p $log_folder 
 validate(){
     if [ $1 -ne 0 ];then
-    echo "$R $2 is failed $N" &>> $log_file
+    echo -e "$R $2 is failed $N" &>> $log_file
+    exit 1
     else
-    echo "$G $2 is success $N" &>> $log_file
+    echo -e "$G $2 is success $N" &>> $log_file
     fi
 }
 
@@ -33,7 +34,7 @@ dnf install nodejs -y &>>$log_file
 validate $? "installing nodejs" 
 
 id roboshop &>>$log_file
-if [ $1 -ne 0 ];then
+if [ $? -ne 0 ];then
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $log_file
 validate $? "creating system user" 
 else
@@ -45,6 +46,7 @@ validate $? "creating directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>> $log_file
 validate $? "downloading catalouge code" 
+
 cd /app &>>$log_file
 validate $? "moving app directory" 
 
@@ -77,7 +79,7 @@ INDEX=$(mongosh --host $mongodb_host --quiet  --eval 'db.getMongo().getDBNames()
 
 if [ $INDEX -le 0 ]; then
 
-    mongosh --host $MONGODB_HOST </app/db/master-data.js
+    mongosh --host $mongodb_host </app/db/master-data.js
     validate $? "Loading products"
 
 else
