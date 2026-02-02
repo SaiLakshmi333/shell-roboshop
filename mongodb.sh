@@ -16,14 +16,15 @@ fi
 mkdir -p $log_folder
 validate(){
     if [ $? -ne 0 ];then
-    echo -e "$R $2 is failed $n" &>>$log_file
+    echo -e "$R $2 is failed $n" &>>$log_file 
     exit 1
     else 
-    echo -e "$R $2 is success $n" &>>$log_file
+    echo -e "$G $2 is success $n" &>>$log_file
     fi
 }
 
 cp mongodb.repo /etc/yum.repos.d/mongo.repo
+
 dnf install mongodb-org -y 
 validate $? "installing mongodb" &>>$log_file
 
