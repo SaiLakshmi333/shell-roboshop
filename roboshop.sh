@@ -38,7 +38,28 @@ aws ec2 run-instances \
     --query 'Instances[0].InstanceId' \
     --output text
 
-    aws route53 change-resource-record-sets --hosted-zone-id Z1234567890ABC --change-batch file://change-record.json
+    aws route53 change-resource-record-sets /
+    --hosted-zone-id Z067791029EEJ0FAK30QG /
+    --change-batch file://change-record.json
+
+    {
+  "Comment": "Update A record for webserver",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "webserver.example.com.",
+        "Type": "A",
+        "TTL": 1,
+        "ResourceRecords": [
+          {
+            "Value": "192.0.2.44"
+          }
+        ]
+      }
+    }
+  ]
+}
 
 
 

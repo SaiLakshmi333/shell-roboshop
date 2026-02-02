@@ -1,6 +1,8 @@
 #!/bin/bash
 SG_ID="sg-0b4c1bffcd0783883"
 AMI_ID="ami-0220d79f3f480ecf5"
+ZONE_ID="Z067791029EEJ0FAK30QG"
+DOMAIN_NAME="devopswithsai.online"
 for instance in $@
 do
     instance_id=$(
@@ -19,6 +21,7 @@ do
          --query 'Reservations[].Instances[].PublicIpAddress' \
          --output text 
          )
+         RECORD_NAME="$DOMAIN_NAME"
          else
     IP=$(
         aws ec2 describe-instances \
@@ -26,6 +29,31 @@ do
          --query 'Reservations[].Instances[].PrivateIpAddress' \
          --output text 
          )
+         RECO0RD_NAME="$instance.$DOMAIN_NAME"
          fi
 echo "IP address :$IP"
-         done
+        
+
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch
+    {
+  "Comment": "Update A record for webserver",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "'$RECORD_NAME'",
+        "Type": "A",
+        "TTL": 1,
+        "ResourceRecords": [
+          {
+            "Value": "'$IP'"
+          }
+        ]
+      }
+    }
+  ]
+}
+
+echo "record updated : $instance"
+
+done
