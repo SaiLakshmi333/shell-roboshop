@@ -14,7 +14,7 @@ echo -e "$R Please enter with root access $N" | tee -a $log_file
 exit 1
 fi
 
-mkdir -p shell_folder 
+mkdir -p $log_folder 
 validate(){
     if [ $1 -ne 0 ];then
     echo "$R $2 is failed $N" &>>$log_file
