@@ -38,5 +38,8 @@ aws ec2 run-instances \
     --query 'Instances[0].InstanceId' \
     --output text
 
+    aws route53 change-resource-record-sets --hosted-zone-id Z1234567890ABC --change-batch file://change-record.json
+
+
 
     
