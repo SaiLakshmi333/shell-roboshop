@@ -7,11 +7,13 @@ G="\e[32m"
 y="\e[33m"
 b="\e[34m" 
 n="\e[0m"
+
 if [ $user_id -ne 0 ];then
 echo "Please access with root user"
 exit 1
 else
 fi
+
 mkdir -p $log_folder
 validate(){
     if [ $? -ne 0 ];then
