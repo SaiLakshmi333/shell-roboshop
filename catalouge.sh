@@ -10,7 +10,7 @@ N="\e[0m"
 SCRIPT_DIR=$PWD
 mongodb_host=mongodb.devopswithsai.online
 if [ $user_id -ne 0 ];then
-echo "$R Please enter with root access $N" | tee -a $log_file
+echo -e "$R Please enter with root access $N" | tee -a $log_file
 exit 1
 fi
 
@@ -24,59 +24,59 @@ validate(){
 }
 
 dnf module disable nodejs -y
-validate $? "disable old nodejs"
+validate $? "disable old nodejs" | tee -a $log_file
 
 dnf module enable nodejs:20 -y
-validate $? "enable nodejs"
+validate $? "enable nodejs" | tee -a $log_file
 
 dnf install nodejs -y
-validate $? "installing nodejs"
+validate $? "installing nodejs" | tee -a $log_file
 
 id roboshop &>>$log_file
 if [ $? -ne 0];then
 
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-validate $? "creating system user"
+validate $? "creating system user" | tee -a $log_file
 else
-echo -e "roboshop user already exist $Y skipping $n"
+echo -e "roboshop user already exist $Y skipping $n" | tee -a $log_file
 fi
 
 mkdir -p /app
-validate $? "creating directory"
+validate $? "creating directory" | tee -a $log_file
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
-validate $? "downloading catalouge code"
+validate $? "downloading catalouge code" | tee -a $log_file
 
 cd /app 
-validate $? "moving app directory"
+validate $? "moving app directory" | tee -a $log_file
 
 rm -rf /app*
-validate $? "removing the existing code"
+validate $? "removing the existing code" | tee -a $log_file
 
 unzip /tmp/catalogue.zip
-validate $? "unzip catalouge code"
+validate $? "unzip catalouge code" | tee -a $log_file
 
 npm install 
-validate $? "installing dependencies"
+validate $? "installing dependencies" | tee -a $log_file
 
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
-validate $? "copy catalogue service"
+validate $? "copy catalogue service" | tee -a $log_file
 
 systemctl daemon-reload
-validate $? "daemon reloaded successfully"
+validate $? "daemon reloaded successfully" | tee -a $log_file
 
 systemctl enable catalogue
-validate $? "enabled catalogue"
+validate $? "enabled catalogue" | tee -a $log_file
 
 systemctl start catalogue
-validate $? "started catalogue"
+validate $? "started catalogue" | tee -a $log_file
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y
-validate $? "install mongodb"
+validate $? "install mongodb" | tee -a $log_file
 
 mongosh --host $mongodb_host </app/db/master-data.js
-validate $? "install mongodb"
+validate $? "install mongodb" | tee -a $log_file
 
 
 
