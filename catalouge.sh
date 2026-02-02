@@ -23,59 +23,73 @@ validate(){
     fi
 }
 
-dnf module disable nodejs -y
-validate $? "disable old nodejs" &>>$log_file
+dnf module disable nodejs -y &>>$log_file
+validate $? "disable old nodejs" 
 
-dnf module enable nodejs:20 -y
-validate $? "enable nodejs" &>>$log_file
+dnf module enable nodejs:20 -y &>>$log_file
+validate $? "enable nodejs" 
 
-dnf install nodejs -y
-validate $? "installing nodejs" &>>$log_file
+dnf install nodejs -y &>>$log_file
+validate $? "installing nodejs" 
 
 id roboshop &>>$log_file
 if [ $? -ne 0];then
-
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-validate $? "creating system user" &>>$log_file
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
+validate $? "creating system user" 
 else
-echo -e "roboshop user already exist $Y skipping $n" &>>$log_file
+echo -e "roboshop user already exist $Y skipping $n" &>>$log_file 
 fi
 
-mkdir -p /app
-validate $? "creating directory" &>>$log_file
+mkdir -p /app &>>$log_file
+validate $? "creating directory" 
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
-validate $? "downloading catalouge code" &>>$log_file
-cd /app 
-validate $? "moving app directory" &>>$log_file
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  &>>$log_file
+validate $? "downloading catalouge code" 
+cd /app &>>$log_file
+validate $? "moving app directory" 
 
-rm -rf /app*
-validate $? "removing the existing code" &>>$log_file
+rm -rf /app/* &>>$log_file
+validate $? "removing the existing code" 
 
-unzip /tmp/catalogue.zip
-validate $? "unzip catalouge code" &>>$log_file
+unzip /tmp/catalogue.zip &>>$log_file
+validate $? "unzip catalouge code" 
 
-npm install 
-validate $? "installing dependencies" &>>$log_file
+npm install &>>$log_file
+validate $? "installing dependencies" 
 
-cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
-validate $? "copy catalogue service" &>>$log_file
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$log_file
+validate $? "copy catalogue service" 
 
-systemctl daemon-reload
-validate $? "daemon reloaded successfully" &>>$log_file
+systemctl daemon-reload &>>$log_file
+validate $? "daemon reloaded successfully" 
 
-systemctl enable catalogue
-validate $? "enabled catalogue" &>>$log_file
+systemctl enable catalogue &>>$log_file
+validate $? "enabled catalogue" 
 
-systemctl start catalogue
-validate $? "started catalogue" &>>$log_file
+systemctl start catalogue &>>$log_file
+validate $? "started catalogue" 
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-dnf install mongodb-mongosh -y
-validate $? "install mongodb" &>>$log_file
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>>$log_file
+dnf install mongodb-mongosh -y &>>$log_file
+validate $? "install mongodb" 
 
-mongosh --host $mongodb_host </app/db/master-data.js
-validate $? "install mongodb" &>>$log_file
+INDEX=$(mongosh --host $mongodb_host --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")') 
+
+if [ $INDEX -le 0 ]; then
+
+    mongosh --host $MONGODB_HOST </app/db/master-data.js
+
+    VALIDATE $? "Loading products"
+
+else
+
+    echo -e "Products already loaded ... $Y SKIPPING $N"
+
+fi
+
+systemctl restart catalogue
+VALIDATE $? "Restarting catalogue"
+
 
 
 
