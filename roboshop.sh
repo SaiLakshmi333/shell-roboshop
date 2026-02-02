@@ -61,6 +61,11 @@ aws ec2 run-instances \
   ]
 }
 
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "$(cat <<EOF
+{ "Comment":"Update A record","Changes":[{"Action":"UPSERT","ResourceRecordSet":{"Name":"$RECORD_NAME","Type":"A","TTL":1,"ResourceRecords":[{"Value":"$IP"}]}}]}
+EOF
+)"
+
 
 
     
