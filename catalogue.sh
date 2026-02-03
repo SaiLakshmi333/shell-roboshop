@@ -81,7 +81,6 @@ if [ $INDEX -le 0 ]; then
 
     mongosh --host $mongodb_host </app/db/master-data.js
     validate $? "Loading products"
-
 else
 
     echo -e "Products already loaded ... $Y SKIPPING $N"
