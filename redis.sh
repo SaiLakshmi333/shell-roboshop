@@ -33,12 +33,6 @@ validate $? "enabling redis"
 dnf install redis -y &>>$log_file
 validate $? "installing redis"
 
-cp $SCRIPT_DIR/redis.conf /etc/redis/redis.conf &>>$log_file
-validate $? "copying redis conf"
-
-sed -i /s/127.0.0.1/0.0.0.0/g /etc/redis/redis.conf &>>$log_file
-validate $? "allowing all connections"
-
 sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf &>>$log_file
 validate $? "allowing all connections"
 
