@@ -11,7 +11,7 @@ SCRIPT_DIR=$PWD
 redis_host_name="redis.devopswithsai.online"
 
 if [ $user_id -ne 0 ];then
-echo -e "$R please enter with root access $N"
+echo -e "$R please enter with root access $N" &>>$log_file
 exit 1
 
 mkdir -p $log_folder
@@ -23,44 +23,45 @@ mkdir -p $log_folder
     fi 
  }
 
- dnf module disable nodejs -y
-dnf module enable nodejs:20 -y
+ dnf module disable nodejs -y &>>$log_file
+dnf module enable nodejs:20 -y &>>$log_file
 validate $? "disabled and enabled"
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$log_file
 validate $? "installed nodejs"
 
 id roboshop
 if [ $? -ne 0 ];then
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$log_file
 validate $? "user added"
 else
 echo "user already exist"
 fi
 
-mkdir -p /app 
+mkdir -p /app &>>$log_file
 validate $? "creating app directory"
 
-curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
+curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$log_file
 validate $? "downloaded the cart content"
-cd /app 
 
-rm -rf */app/
+cd /app &>>$log_file
+
+rm -rf */app/ &>>$log_file
 validate $? "removed the old content"
 
-unzip /tmp/cart.zip
+unzip /tmp/cart.zip &>>$log_file
 validate $? "unzipped the cart content"
 
-cd /app 
-npm install 
+cd /app &>>$log_file
+npm install &>>$log_file
 validate $? "unzipped the cart content"
 
-cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service
+cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service &>>$log_file
 validate $? "copied the cart service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$log_file
 validate $? "deamon-reloaded"
 
-systemctl enable cart 
-systemctl start cart
+systemctl enable cart &>>$log_file
+systemctl start cart &>>$log_file
 validate $? "enable and disable"
