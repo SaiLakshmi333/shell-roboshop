@@ -2,11 +2,11 @@
 user_id=$(id -u)
 log_folder="/var/log/shell-folder/"
 log_file="/var/log/shell-folder/$0.log"
-R="/e[31m" 
-G="/e[32m"
-Y="/e[33m"
-B="/e[34m" 
-N="/e[0m"
+R="\e[31m" 
+G="\e[32m"
+Y="\e[33m"
+B="\e[34m" 
+N="\e[0m"
 SCRIPT_DIR=$PWD
 
 if [ $user_id -ne 0 ];then
