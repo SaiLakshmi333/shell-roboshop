@@ -70,10 +70,10 @@ validate $? "installing mysql client" &>> $log_file
 mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/schema.sql
 validate $? "Load Schema, Schema in database is the structure to it like what tables to be created and their necessary application layouts" &>> $log_file
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/app-user.sql 
+mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/app-user.sql 
 validate $? "Create app user, MySQL expects a password authentication"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/master-data.sql
+mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/master-data.sql
 validate $? "load master data"
 
 systemctl restart shipping
