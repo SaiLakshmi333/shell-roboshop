@@ -51,7 +51,7 @@ validate $? "downloaded the cart content"
 cd /app &>>$log_file
 validate $? "Go to app directory"
 
-rm -rf */app/ &>>$log_file
+rm -rf /app/* &>>$log_file
 validate $? "removed existing data"
 
 unzip /tmp/cart.zip &>>$log_file
