@@ -35,10 +35,10 @@ validate $? "installing nodejs"
 
 id roboshop
 if [ $? -ne 0 ];then
-cartadd --system --home /app --shell /sbin/nologin --comment "roboshop system cart" roboshop &>>$log_file
-validate $? "cart added"
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system cart" roboshop &>>$log_file
+validate $? "user added"
 else
-echo "cart already exist"
+echo "user already exist"
 fi
 
 mkdir /app &>>$log_file
