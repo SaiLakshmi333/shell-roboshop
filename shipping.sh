@@ -34,49 +34,49 @@ else
 echo "user already exist" &>> $log_file
 fi
 
-mkdir -p /app
-validate $? "creating app directory" &>> $log_file
+mkdir -p /app &>> $log_file
+validate $? "creating app directory" 
 
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
-validate $? "downloading shipping content" &>> $log_file
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip  &>> $log_file
+validate $? "downloading shipping content" 
 
-cd /app 
-validate $? "go inside app directory " &>> $log_file
+cd /app &>> $log_file
+validate $? "go inside app directory " 
 
-rm -rf /app/*
-validate $? "removing old content" &>> $log_file
+rm -rf /app/* &>> $log_file
+validate $? "removing old content" 
 
-unzip /tmp/shipping.zip
-validate $? "unzip the content" &>> $log_file
+unzip /tmp/shipping.zip &>> $log_file
+validate $? "unzip the content" 
 
-cd /app 
-mvn clean package 
-mv target/shipping-1.0.jar shipping.jar 
-validate $? "clean" &>> $log_file
+cd /app &>> $log_file
+mvn clean package &>> $log_file
+mv target/shipping-1.0.jar shipping.jar &>> $log_file
+validate $? "clean" 
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
-validate $? "copying the service" &>> $log_file
+cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>> $log_file
+validate $? "copying the service" 
 
-systemctl daemon-reload
-validate $? "cdaemon reloaded" &>> $log_file
+systemctl daemon-reload &>> $log_file
+validate $? "cdaemon reloaded" 
 
-systemctl enable shipping 
-systemctl start shipping
-validate $? "enable and starting shipping " &>> $log_file
+systemctl enable shipping &>> $log_file
+systemctl start shipping &>> $log_file
+validate $? "enable and starting shipping " 
 
-dnf install mysql -y 
-validate $? "installing mysql client" &>> $log_file
+dnf install mysql -y &>> $log_file
+validate $? "installing mysql client" 
 
-mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/schema.sql
-validate $? "Load Schema, Schema in database is the structure to it like what tables to be created and their necessary application layouts" &>> $log_file
+mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/schema.sql &>> $log_file
+validate $? "Load Schema, Schema in database is the structure to it like"
 
-mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/app-user.sql 
+mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/app-user.sql &>> $log_file
 validate $? "Create app user, MySQL expects a password authentication"
 
-mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/master-data.sql
+mysql -h $mysql_host -uroot -pRoboShop@1 < /app/db/master-data.sql &>> $log_file
 validate $? "load master data"
 
-systemctl restart shipping
+systemctl restart shipping &>> $log_file
 validate $? "restart shipping"
 
 
