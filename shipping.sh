@@ -27,9 +27,10 @@ validate(){
 dnf install maven -y
 validate $? "installing maven" &>> $log_file
 
-id roboshop &>> $log_file
-if [$? -ne 0 ];then
+id roboshop &>>$log_file
+if [ $? -ne 0 ];then
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> $log_file
+validate $? "creating system user"
 else
 echo "user already exist" &>> $log_file
 fi
