@@ -13,7 +13,7 @@ if [ $user_id -ne 0 ];then
 echo "please access wth root user"
 exit 1
 fi
-mkdir -p $log_folder &>>$log_file
+mkdir -p $log_folder 
 validate(){
     if [ $1 -ne 0 ];then
     echo -e "$2 is $R failed"
