@@ -23,26 +23,26 @@ validate(){
     }
 
 
-dnf module disable redis -y &>>$log_file
+dnf module disable redis -y  &>>$log_file
 validate $? "disabling redis"
 
-dnf module enable redis:7 -y $>>$log_file
+dnf module enable redis:7 -y &>>$log_file
 validate $? "enabling redis"
 
-dnf install redis -y $>>$log_file
+dnf install redis -y &>>$log_file
 validate $? "installing redis"
 
-cp $SCRIPT_DIR/redis.conf /etc/redis/redis.conf $>>$log_file
+cp $SCRIPT_DIR/redis.conf /etc/redis/redis.conf &>>$log_file
 validate $? "copying redis conf"
 
-sed -i /s/127.0.0.1/0.0.0.0/g /etc/redis/redis.conf $>>$log_file
+sed -i /s/127.0.0.1/0.0.0.0/g /etc/redis/redis.conf &>>$log_file
 validate $? "allowing all connections"
 
-sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf $>>$log_file
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf &>>$log_file
 validate $? "allowing all connections"
 
-systemctl enable redis $>>$log_file
+systemctl enable redis &>>$log_file
 validate $? "enabling redis"
 
-systemctl start redis $>>$log_file
+systemctl start redis &>>$log_file
 validate $? "starting redis"
