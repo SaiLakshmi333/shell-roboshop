@@ -17,13 +17,13 @@ exit 1
 mkdir -p $log_folder
  validate(){
     if [ $1 -ne 0 ];then
-    echo "$2 $R failed $N"
+    echo -e "$2 $R failed $N"
     else
-    echo "$2 $R success $N"
+    echo -e "$2 $R success $N"
     fi 
  }
 
- dnf module disable nodejs -y &>>$log_file
+dnf module disable nodejs -y &>>$log_file
 dnf module enable nodejs:20 -y &>>$log_file
 validate $? "disabled and enabled"
 
