@@ -19,6 +19,7 @@ validate(){
     echo "$2 is $R failed"
     else
     echo "$2 is $G success"
+    fi
 }
 
 dnf install mysql-server -y
