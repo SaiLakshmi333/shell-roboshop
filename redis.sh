@@ -14,6 +14,8 @@ echo -e "$R Please enter with root access$N"
 exit 1
 fi
 
+mkdir -p $log_folder
+
 validate(){
     if [ $1 -ne 0 ];then
     echo -e "$R $2  failed$N"
