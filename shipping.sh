@@ -1,6 +1,6 @@
 #!/bin/bash
 user_id=$(id -u)
-log_folder="/var/log/shell_folder"
+log_folder="/var/log/shell_folder/"
 log_file="/var/log/shell_folder/$0.log"
 R="\e[31m"
 G="\e[32m"
