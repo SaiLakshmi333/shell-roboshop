@@ -18,8 +18,10 @@ validate(){
     if [ $1 -ne 0 ];then
     echo -e "$R $2  failed$N"
     else
-    echo  -e "$G $2 success $N"
-}
+    echo  -e "$G $2 success $N
+    fi
+    }
+
 
 dnf module disable redis -y &>>$log_file
 validate $? "disabling redis"
